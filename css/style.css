@@ -48,3 +48,58 @@ nav ul li a:hover {
     max-width: 300px;
     height: auto;
 }
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 30px;
+}
+article {
+    max-width: 800px;
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    border-bottom: solid 1px #9f9f9f;
+}
+.article-photo {
+    max-width: 300px;
+    height: auto;
+}
+.article-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+span {
+    color: red;
+    font-family: 'Trebuchet MS', sans-serif;
+}
+.category {
+    font-family: Brush Script MT, Brush Script Std, cursive;
+}
+.author {
+    font-size: 12px;
+    color: rgba(66,66,69,0.84);
+    font-family: 'Trebuchet MS', sans-serif;
+}
+.about-article {
+    font-family: monospace;
+}
+.about-article a {
+    text-decoration: none;
+    color: inherit;
+}
+footer {
+    background-color: #cacaca;
+    margin-top: 20px;
+    padding: 25px 0;
+    text-align: center;
+}
+footer div {
+    font-family: 'Trebuchet MS', sans-serif;
+    font-size: 12px;
+    color: rgba(66,66,69,0.84);
+}
