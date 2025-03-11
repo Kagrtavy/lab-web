@@ -37,7 +37,7 @@ nav ul li:not(:last-child)::after {
 }
 nav ul li a {
     text-decoration: none;
-    color: inherit;
+    color: #000;
 }
 nav ul li a:hover {
     color: red;
