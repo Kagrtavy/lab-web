@@ -3,7 +3,7 @@ body {
     padding: 0;
     overflow-x: hidden;
 }
-.header {
+.main-header {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -20,29 +20,29 @@ body {
     border: rgba(213, 213, 213, 0.78) solid 1px;
     margin-top: 20px;
 }
-nav ul {
+.main-header nav ul {
     list-style: none;
     padding: 0;
     display: flex;
     gap: 20px;
     font-family: 'Trebuchet MS', sans-serif;
 }
-nav ul li {
+.main-header nav ul li {
     display: inline-block;
 }
-nav ul li:not(:last-child)::after {
+.main-header nav ul li:not(:last-child)::after {
     content: " | ";
     color: gray;
     margin-left: 10px;
 }
-nav ul li a {
+.main-header nav ul li a {
     text-decoration: none;
     color: #000;
 }
-nav ul li a:hover {
+.main-header nav ul li a:hover {
     color: #ff0000;
 }
-.logo {
+.main-header .logo {
     display: block;
     margin-top: 20px;
     max-width: 300px;
@@ -54,7 +54,7 @@ main {
     align-items: center;
     margin-top: 30px;
 }
-article {
+.article-box {
     max-width: 800px;
     width: 100%;
     padding: 20px;
@@ -64,41 +64,39 @@ article {
     gap: 20px;
     border-bottom: solid 1px #9f9f9f;
 }
-.article-photo {
+.article-box .article-photo {
     max-width: 300px;
     height: auto;
 }
-.article-content {
+.article-box .article-wrap {
     display: flex;
     flex-direction: column;
     justify-content: center;
 }
-span {
+.article-box span {
     color: #ff0000;
     font-family: 'Trebuchet MS', sans-serif;
 }
-.category {
+.article-box .category {
     font-family: Brush Script MT, Brush Script Std, cursive;
 }
-.author {
+.article-box .author {
     font-size: 12px;
     color: rgba(66, 66, 69, 0.84);
     font-family: 'Trebuchet MS', sans-serif;
 }
-.about-article {
+.article-box .content {
     font-family: monospace;
 }
-.about-article a {
+.article-box .about-article a {
     text-decoration: none;
     color: inherit;
 }
-footer {
+.main-footer {
     background-color: #cacaca;
     margin-top: 20px;
     padding: 25px 0;
     text-align: center;
-}
-footer div {
     font-family: 'Trebuchet MS', sans-serif;
     font-size: 12px;
     color: rgba(66,66,69,0.84);
