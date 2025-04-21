@@ -1,6 +1,6 @@
 <?php
-
-function getPublications(): array {
+function getPublications(): array
+{
     return [
         [
             'id' => 1,
@@ -32,7 +32,8 @@ function getPublications(): array {
     ];
 }
 
-function getPublicationById(int $id): ?array {
+function getPublicationById(int $id): ?array
+{
     $publications = getPublications();
     foreach ($publications as $publication) {
         if ($publication['id'] === $id) {
