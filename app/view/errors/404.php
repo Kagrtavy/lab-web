@@ -1,6 +1,0 @@
-<?php
-if (!$post) {
-    http_response_code(404);
-    echo "<h1>404 — Publication not found</h1>";
-    exit;
-}

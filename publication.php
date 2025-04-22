@@ -1,9 +1,17 @@
 <?php
 require_once "app" . DIRECTORY_SEPARATOR. "func" . DIRECTORY_SEPARATOR . "function.php";
-include "app" . DIRECTORY_SEPARATOR . "view" . DIRECTORY_SEPARATOR . "errors" . DIRECTORY_SEPARATOR . "400.php";
-$id = (int) $_GET['id'];
+if (!isset($_GET['id']) || !is_numeric($_GET['id']) || (int)$_GET['id'] <= 0) {
+    http_response_code(400);
+    echo "<h1>400 — Invalid request</h1>";
+    exit;
+}
+$id = (int)$_GET['id'];
 $post = getPublicationById($id);
-include "app" . DIRECTORY_SEPARATOR . "view" . DIRECTORY_SEPARATOR . "errors" . DIRECTORY_SEPARATOR . "404.php";
+if (!$post) {
+    http_response_code(404);
+    echo "<h1>404 — Publication not found</h1>";
+    exit;
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
