@@ -1,44 +1,47 @@
 <?php
+function getDbConnection(): mysqli
+{
+    $host = 'localhost';
+    $user = 'root';
+    $password = '';
+    $dbname = 'lab-web';
+    $conn = new mysqli($host, $user, $password, $dbname);
+    if ($conn->connect_error) {
+        die('Connection error: ' . $conn->connect_error);
+    }
+    $conn->set_charset("utf8mb4");
+    return $conn;
+}
+
 function getPublications(): array
 {
-    return [
-        [
-            'id' => 1,
-            'title' => 'Our Breakfast Ritual',
-            'category' => 'FOOD',
-            'content' => "I cannot look at a big bowl of salad without thinking of my mother. Let's talk about vegan breakfasts! For a woman who loves breakfast, there are no where near enough breakfast recipes up...",
-            'author' => 'Emma',
-            'image' => 'salad.jpg',
-            'created' => '2018-05-15 10:00:00',
-        ],
-        [
-            'id' => 2,
-            'title' => 'My Homemade Dress',
-            'category' => 'LOOKS',
-            'content' => "A-line short sleeves above the knee red elastane peplum detail wool-mix soft pink lining. Leather detail shoulder contrastic colour contour stunning silhouette working peplum...",
-            'author' => 'Emma',
-            'image' => 'girl.jpg',
-            'created' => '2018-05-14 12:30:00',
-        ],
-        [
-            'id' => 3,
-            'title' => 'Minimalist Travel: A Weekend in Venice',
-            'category' => 'TRAVEL',
-            'content' => "Venice is a city in northeastern Italy sited on a group of 118 small islands separated by canals and linked by bridges. It is located in the marshy Venetian Lagoon...",
-            'author' => 'Emma',
-            'image' => 'venice.jpg',
-            'created' => '2018-05-10 09:00:00',
-        ]
-    ];
+    $conn = getDbConnection();
+    $sql = "SELECT a.id, a.title, a.content, a.image, a.created, u.name AS author, c.title AS category
+    FROM articles a JOIN users u ON a.user_id = u.id JOIN categories c ON a.category_id = c.id ORDER BY a.created DESC";
+    $result = $conn->query($sql);
+    $publications = [];
+    if ($result && $result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $publications[] = $row;
+        }
+    }
+    $conn->close();
+    return $publications;
 }
 
 function getPublicationById(int $id): ?array
 {
-    $publications = getPublications();
-    foreach ($publications as $publication) {
-        if ($publication['id'] === $id) {
-            return $publication;
-        }
+    $conn = getDbConnection();
+    $stmt = $conn->prepare("SELECT a.id, a.title, a.content, a.image, a.created, u.name AS author, c.title AS category
+    FROM articles a JOIN users u ON a.user_id = u.id JOIN categories c ON a.category_id = c.id WHERE a.id = ? LIMIT 1");
+    if (!$stmt) {
+        die('Error in preparing a request: ' . $conn->error);
     }
-    return null;
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $post = $result->fetch_assoc() ?: null;
+    $stmt->close();
+    $conn->close();
+    return $post;
 }
