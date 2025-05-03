@@ -1,17 +1,24 @@
 <?php
 function getDbConnection(): mysqli
 {
-    $host = 'localhost';
-    $user = 'root';
-    $password = '';
-    $dbname = 'lab-web';
-    $conn = new mysqli($host, $user, $password, $dbname);
-    if ($conn->connect_error) {
-        die('Connection error: ' . $conn->connect_error);
+    static $conn = null;
+    if ($conn === null) {
+        $host = 'localhost';
+        $user = 'root';
+        $password = '';
+        $dbname = 'lab-web';
+        try {
+            mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+            $conn = new mysqli($host, $user, $password, $dbname);
+            $conn->set_charset("utf8mb4");
+        } catch (mysqli_sql_exception $e) {
+            http_response_code(500);
+            die('Connection error: ' . $e->getMessage());
+        }
     }
-    $conn->set_charset("utf8mb4");
     return $conn;
 }
+
 
 function getPublications(): array
 {
@@ -25,7 +32,6 @@ function getPublications(): array
             $publications[] = $row;
         }
     }
-    $conn->close();
     return $publications;
 }
 
@@ -42,6 +48,5 @@ function getPublicationById(int $id): ?array
     $result = $stmt->get_result();
     $post = $result->fetch_assoc() ?: null;
     $stmt->close();
-    $conn->close();
     return $post;
 }
