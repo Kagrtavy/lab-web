@@ -13,6 +13,16 @@
                 <time datetime="<?= $post['created'] ?>">
                     <?= date('F j, Y', strtotime($post['created'])) ?>
                 </time>
+                <?php if (isset($post['comment_count'])): ?>
+                    <span class="comment-count">
+                        <?= $post['comment_count'] ?> comment<?= $post['comment_count'] !== 1 ? 's' : '' ?>
+                    </span>
+                <?php endif; ?>
+                <?php if (isset($post['average_rating'])): ?>
+                    <div class="average-rating">
+                        Rating: <?= $post['average_rating'] ?>/5
+                    </div>
+                <?php endif; ?>
             </div>
         </header>
         <div class="content">

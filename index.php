@@ -1,6 +1,11 @@
 <?php
 require_once "app" . DIRECTORY_SEPARATOR. "func" . DIRECTORY_SEPARATOR . "function.php";
 $publications = getPublications();
+foreach ($publications as &$post) {
+    $post['comment_count'] = getCommentCountById($post['id']);
+    $post['average_rating'] = getAverageRating($post['id']);
+}
+unset($post);
 ?>
 <!DOCTYPE html>
 <html lang="en">

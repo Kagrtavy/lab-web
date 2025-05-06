@@ -19,7 +19,6 @@ function getDbConnection(): mysqli
     return $conn;
 }
 
-
 function getPublications(): array
 {
     $conn = getDbConnection();
@@ -50,3 +49,59 @@ function getPublicationById(int $id): ?array
     $stmt->close();
     return $post;
 }
+
+function addComment(int $articleId, string $author, string $rate, string $content): bool
+{
+    $conn = getDbConnection();
+    $stmt = $conn->prepare("INSERT INTO comments (article_id, author, rate, content, created) VALUES (?, ?, ?, ?, NOW())");
+    if (!$stmt) {
+        error_log("Помилка підготовки запиту: " . $conn->error);
+        return false;
+    }
+    $stmt->bind_param("isss", $articleId, $author, $rate, $content);
+    $success = $stmt->execute();
+    $stmt->close();
+    return $success;
+}
+
+function getCommentsById(int $articleId): array
+{
+    static $conn = null;
+    if ($conn === null) {
+        $conn = getDbConnection();
+    }
+    $stmt = $conn->prepare("SELECT author, rate, content, created FROM comments WHERE article_id = ? ORDER BY created DESC");
+    $stmt->bind_param("i", $articleId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    return $result->fetch_all(MYSQLI_ASSOC);
+}
+
+function getCommentCountById(int $articleId): int
+{
+    static $conn = null;
+    if ($conn === null) {
+        $conn = getDbConnection();
+    }
+    $stmt = $conn->prepare("SELECT COUNT(*) FROM comments WHERE article_id = ?");
+    $stmt->bind_param("i", $articleId);
+    $stmt->execute();
+    $stmt->bind_result($count);
+    $stmt->fetch();
+    return (int)$count;
+}
+
+function getAverageRating(int $articleId): ?float
+{
+    static $conn = null;
+    if ($conn === null) {
+        $conn = getDbConnection();
+    }
+    $stmt = $conn->prepare("SELECT AVG(rate) FROM comments WHERE article_id = ?");
+    $stmt->bind_param("i", $articleId);
+    $stmt->execute();
+    $stmt->bind_result($avg);
+    $stmt->fetch();
+    return $avg !== null ? round($avg, 1) : null;
+}
+
