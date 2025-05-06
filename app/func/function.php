@@ -66,10 +66,7 @@ function addComment(int $articleId, string $author, string $rate, string $conten
 
 function getCommentsById(int $articleId): array
 {
-    static $conn = null;
-    if ($conn === null) {
-        $conn = getDbConnection();
-    }
+    $conn = getDbConnection();
     $stmt = $conn->prepare("SELECT author, rate, content, created FROM comments WHERE article_id = ? ORDER BY created DESC");
     $stmt->bind_param("i", $articleId);
     $stmt->execute();
@@ -79,10 +76,7 @@ function getCommentsById(int $articleId): array
 
 function getCommentCountById(int $articleId): int
 {
-    static $conn = null;
-    if ($conn === null) {
-        $conn = getDbConnection();
-    }
+    $conn = getDbConnection();
     $stmt = $conn->prepare("SELECT COUNT(*) FROM comments WHERE article_id = ?");
     $stmt->bind_param("i", $articleId);
     $stmt->execute();
@@ -93,10 +87,7 @@ function getCommentCountById(int $articleId): int
 
 function getAverageRating(int $articleId): ?float
 {
-    static $conn = null;
-    if ($conn === null) {
-        $conn = getDbConnection();
-    }
+    $conn = getDbConnection();
     $stmt = $conn->prepare("SELECT AVG(rate) FROM comments WHERE article_id = ?");
     $stmt->bind_param("i", $articleId);
     $stmt->execute();
