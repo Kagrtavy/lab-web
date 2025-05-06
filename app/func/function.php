@@ -55,7 +55,7 @@ function addComment(int $articleId, string $author, string $rate, string $conten
     $conn = getDbConnection();
     $stmt = $conn->prepare("INSERT INTO comments (article_id, author, rate, content, created) VALUES (?, ?, ?, ?, NOW())");
     if (!$stmt) {
-        error_log("Помилка підготовки запиту: " . $conn->error);
+        error_log("Error in preparing a request: " . $conn->error);
         return false;
     }
     $stmt->bind_param("isss", $articleId, $author, $rate, $content);
