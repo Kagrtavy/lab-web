@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $rate = $_POST['rate'] ?? '';
     $comment = trim($_POST['comment'] ?? '');
     $errors = validateCommentForm($username, $rate, $comment);
-    if (empty($errors)) {
+    if (count($errors) === 0) {
         addComment($id, $username, $rate, $comment);
         header("Location: publication.php?id=" . $id);
         exit;
@@ -29,18 +29,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 <!DOCTYPE html>
 <html lang="en">
-    <?php require "app" . DIRECTORY_SEPARATOR. "view" . DIRECTORY_SEPARATOR . "templates" . DIRECTORY_SEPARATOR . "head.php"; ?>
+    <?php require "app" . DS. "view" . DS . "templates" . DS . "head.php"; ?>
     <body>
-        <?php require "app" . DIRECTORY_SEPARATOR. "view" . DIRECTORY_SEPARATOR . "templates" . DIRECTORY_SEPARATOR . "header.php"; ?>
+        <?php require "app" . DS. "view" . DS . "templates" . DS . "header.php"; ?>
         <main>
-            <?php require "app" . DIRECTORY_SEPARATOR . "view" . DIRECTORY_SEPARATOR . "templates" . DIRECTORY_SEPARATOR . "article.php"; ?>
+            <?php require "app" . DS . "view" . DS . "templates" . DS . "article.php"; ?>
             <div class="form-box">
-                <?php require "app" . DIRECTORY_SEPARATOR . "view" . DIRECTORY_SEPARATOR . "templates" . DIRECTORY_SEPARATOR . "comment_form.php"; ?>
+                <?php require "app" . DS . "view" . DS . "templates" . DS . "comment_form.php"; ?>
             </div>
             <div class="comment-box">
-                <?php require "app" . DIRECTORY_SEPARATOR . "view" . DIRECTORY_SEPARATOR . "templates" . DIRECTORY_SEPARATOR . "comments.php"; ?>
+                <?php require "app" . DS . "view" . DS . "templates" . DS . "comments.php"; ?>
             </div>
         </main>
-        <?php require "app" . DIRECTORY_SEPARATOR. "view" . DIRECTORY_SEPARATOR . "templates" . DIRECTORY_SEPARATOR . "footer.php"; ?>
+        <?php require "app" . DS. "view" . DS . "templates" . DS . "footer.php"; ?>
     </body>
 </html>

@@ -1,10 +1,15 @@
+<?php
+/**
+ * @var array $post
+ */
+?>
 <article class="article-box">
     <img src="/images/<?= $post['image'] ?>" alt="<?= $post['title'] ?>" class="article-photo">
     <div class="article-wrap">
         <header>
             <div class="category">In <span><?= $post['category'] ?></span></div>
             <h2 class="about-article">
-                <a href="../../../publication.php?id=<?= $post['id'] ?>">
+                <a href="publication.php?id=<?= $post['id'] ?>">
                     <?= $post['title'] ?>
                 </a>
             </h2>

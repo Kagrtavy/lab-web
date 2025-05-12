@@ -1,4 +1,9 @@
-<?php if (!empty($comments)): ?>
+<?php
+/**
+ * @var array $comments
+ */
+?>
+<?php if (count($comments) > 0): ?>
     <h3>Comments:</h3>
     <?php foreach ($comments as $comment): ?>
         <div class="comment-item">
