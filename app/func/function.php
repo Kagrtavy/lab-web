@@ -42,10 +42,6 @@ function getPublicationById(int $id): ?array
     $conn = getDbConnection();
     $stmt = $conn->prepare("SELECT a.id, a.title, a.content, a.image, a.created, u.name AS author, c.title AS category
     FROM articles a JOIN users u ON a.user_id = u.id JOIN categories c ON a.category_id = c.id WHERE a.id = ? LIMIT 1");
-
-    if (!$stmt) {
-        die('Error in preparing a request: ' . $conn->error);
-    }
     $stmt->bind_param("i", $id);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -58,10 +54,6 @@ function addComment(int $articleId, string $author, string $rate, string $conten
 {
     $conn = getDbConnection();
     $stmt = $conn->prepare("INSERT INTO comments (article_id, author, rate, content, created) VALUES (?, ?, ?, ?, NOW())");
-    if (!$stmt) {
-        error_log("Error in preparing a request: " . $conn->error);
-        return false;
-    }
     $stmt->bind_param("isss", $articleId, $author, $rate, $content);
     $success = $stmt->execute();
     $stmt->close();
