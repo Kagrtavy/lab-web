@@ -1,4 +1,5 @@
 <?php
+const DS = DIRECTORY_SEPARATOR;
 function getDbConnection(): mysqli
 {
     static $conn = null;
@@ -22,8 +23,10 @@ function getDbConnection(): mysqli
 function getPublications(): array
 {
     $conn = getDbConnection();
-    $sql = "SELECT a.id, a.title, a.content, a.image, a.created, u.name AS author, c.title AS category
-    FROM articles a JOIN users u ON a.user_id = u.id JOIN categories c ON a.category_id = c.id ORDER BY a.created DESC";
+    $sql = "SELECT a.id, a.title, a.content, a.image, a.created, u.name AS author, c.title AS category, 
+    COUNT(cm.id) AS comment_count, ROUND(AVG(cm.rate), 1) AS average_rating FROM articles a JOIN users u ON a.user_id = u.id
+    JOIN categories c ON a.category_id = c.id LEFT JOIN comments cm ON cm.article_id = a.id
+    GROUP BY a.id, a.title, a.content, a.image, a.created, u.name, c.title ORDER BY a.created DESC";
     $result = $conn->query($sql);
     $publications = [];
     if ($result && $result->num_rows > 0) {
@@ -39,6 +42,7 @@ function getPublicationById(int $id): ?array
     $conn = getDbConnection();
     $stmt = $conn->prepare("SELECT a.id, a.title, a.content, a.image, a.created, u.name AS author, c.title AS category
     FROM articles a JOIN users u ON a.user_id = u.id JOIN categories c ON a.category_id = c.id WHERE a.id = ? LIMIT 1");
+
     if (!$stmt) {
         die('Error in preparing a request: ' . $conn->error);
     }
@@ -73,26 +77,3 @@ function getCommentsById(int $articleId): array
     $result = $stmt->get_result();
     return $result->fetch_all(MYSQLI_ASSOC);
 }
-
-function getCommentCountById(int $articleId): int
-{
-    $conn = getDbConnection();
-    $stmt = $conn->prepare("SELECT COUNT(*) FROM comments WHERE article_id = ?");
-    $stmt->bind_param("i", $articleId);
-    $stmt->execute();
-    $stmt->bind_result($count);
-    $stmt->fetch();
-    return (int)$count;
-}
-
-function getAverageRating(int $articleId): ?float
-{
-    $conn = getDbConnection();
-    $stmt = $conn->prepare("SELECT AVG(rate) FROM comments WHERE article_id = ?");
-    $stmt->bind_param("i", $articleId);
-    $stmt->execute();
-    $stmt->bind_result($avg);
-    $stmt->fetch();
-    return $avg !== null ? round($avg, 1) : null;
-}
-
