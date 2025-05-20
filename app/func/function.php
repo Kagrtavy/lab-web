@@ -50,11 +50,18 @@ function getPublicationById(int $id): ?array
     return $post;
 }
 
-function addComment(int $articleId, string $author, string $rate, string $content): bool
+function addComment(int $articleId, array $data): bool
 {
     $conn = getDbConnection();
-    $stmt = $conn->prepare("INSERT INTO comments (article_id, author, rate, content, created) VALUES (?, ?, ?, ?, NOW())");
-    $stmt->bind_param("isss", $articleId, $author, $rate, $content);
+    $stmt = $conn->prepare("INSERT INTO comments (article_id, author, rate, content, created)
+    VALUES (?, ?, ?, ?, NOW())");
+    $stmt->bind_param(
+        "isss",
+        $articleId,
+        $data['username'],
+        $data['rate'],
+        $data['comment']
+    );
     $success = $stmt->execute();
     $stmt->close();
     return $success;
